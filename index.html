@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js'></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script src="./script.js"></script>
+    <script src="./mainCtrl.js"></script>
+  </head>
+
+  <body ng-app="app">
+    <div ng-controller="main" data-ng-init="getList()" class="container">
+      <div class="header">
+        <div ng-controller="searchCtrl" class="searchBar">
+          <input type="search" ng-model="searchQuery" ng-change="changeInput()">
+          <div class="searchResult" ng-if="searchQuery" ng-mouseleave="clearSearch()">
+            <div class="resultBox" ng-if="searchResult.length > 0" ng-repeat="result in searchResult">
+              <div class="searchResultWrapper" ng-click="handleSearch(result.name)">
+                <img src="{{result.img}}" alt="{{result.name}}">
+                <p>{{result.name}}</p>
+              </div>
+            </div>
+            <div class="resultBox" ng-if="searchResult.length === 0">
+              <div id="notFound" class="searchResultWrapper">
+                <p>No Search Results</p>
+              </div>
+            </div>
+          </div>
+          <!-- <custom-search ng-model="searchQuery" ng-change="changeInput(searchQuery)"></custom-search> -->
+        </div>
+        <div ng-controller="dropDownMenuCtrl" ng-click="handleDropDownMenu()" class="userMenu">
+          <div class="userName">
+            <p>{{loggedInUser}}</p>
+          </div>
+
+          <div class="userImage">
+            <div class="userIcon"></div>
+          </div>
+          <div class="{{_arrow}}"></div>
+
+          <div ng-if="isOpen" class="dropDown" ng-mouseleave="handleDropDownClose()">
+            <div class="menuList">
+
+              <div class="menuItem">
+                <svg class="menuIcon" style="width:24px;height:24px" viewBox="0 0 24 24">
+                  <path fill="#e0e0e0" d="M2,21H20V19H2M20,8H18V5H20M20,3H4V13A4,4 0 0,0 8,17H14A4,4 0 0,0 18,13V10H20A2,2 0 0,0 22,8V5C22,3.89 21.1,3 20,3Z" />
+                </svg>
+                <a class="menuLink" href="#">Coffee Break</a>
+              </div>
+              <div class="menuItem">
+                <svg class="menuIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24">
+                  <path fill="#e0e0e0" d="M4.22,14.12L3.5,13.41C2.73,12.63 2.73,11.37 3.5,10.59C4.3,9.8 5.56,9.8 6.34,10.59L8.92,13.16L13.16,8.92L10.59,6.34C9.8,5.56 9.8,4.3 10.59,3.5C11.37,2.73 12.63,2.73 13.41,3.5L14.12,4.22L19.78,9.88L20.5,10.59C21.27,11.37 21.27,12.63 20.5,13.41C19.7,14.2 18.44,14.2 17.66,13.41L15.08,10.84L10.84,15.08L13.41,17.66C14.2,18.44 14.2,19.7 13.41,20.5C12.63,21.27 11.37,21.27 10.59,20.5L9.88,19.78L4.22,14.12M3.16,19.42L4.22,18.36L2.81,16.95C2.42,16.56 2.42,15.93 2.81,15.54C3.2,15.15 3.83,15.15 4.22,15.54L8.46,19.78C8.85,20.17 8.85,20.8 8.46,21.19C8.07,21.58 7.44,21.58 7.05,21.19L5.64,19.78L4.58,20.84L3.16,19.42M19.42,3.16L20.84,4.58L19.78,5.64L21.19,7.05C21.58,7.44 21.58,8.07 21.19,8.46C20.8,8.86 20.17,8.86 19.78,8.46L15.54,4.22C15.15,3.83 15.15,3.2 15.54,2.81C15.93,2.42 16.56,2.42 16.95,2.81L18.36,4.22L19.42,3.16Z" />
+                </svg>
+                <a class="menuLink" href="#">Work Out</a>
+              </div>
+              <div class="menuItem">
+                <svg class="menuIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24">
+                      <path fill="#e0e0e0" d="M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z" />
+                </svg>
+                <a class="menuLink" href="#">Work</a>
+              </div>
+              <div ng-if="isLoggedIn" class="menuItem">
+                <svg class="menuIcon" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24">
+                  <path fill="#e0e0e0" d="M17,17.25V14H10V10H17V6.75L22.25,12L17,17.25M13,2A2,2 0 0,1 15,4V8H13V4H4V20H13V16H15V20A2,2 0 0,1 13,22H4A2,2 0 0,1 2,20V4A2,2 0 0,1 4,2H13Z" />
+                </svg>
+                <a class="menuLink" href="#">Log Out</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="content">
+        <div class="list">
+          <div ng-repeat="person in peopleList.People" ng-click="displayUser(person.name)" class="sideBar">
+            <p>{{person.name}}</p>
+            <span class="arrow"></span>
+          </div>
+        </div>
+        <div ng-if="userProfile === undefined" class="dashboard">
+          <h1>Inital DashBoard view</h1>
+        </div>
+        <div ng-if="userProfile !== undefined" class="profileView">
+          <div ng-controller="messageCtrl" class="profileTop">
+            <div class="image">
+              <img class="profileImg" src="{{userProfile[0].img}}" alt="{{userProfile[0].name}}">
+            </div>
+            <textarea ng-model="messageContent" ng-change="changeInput(messageContent)" ng-if="displayMessageInput" class="messageInput" rows="2" cols="30"></textarea>
+            <div class="imgRight">
+              <div class="button">
+                <button ng-click="handleSendMessageInput()">SEND MESSAGE!</button>
+              </div>
+              <div ng-if="!displayMessageInput" ng-repeat="heart in heartStyles track by $index" class="rating">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" enable-background="new 0 0 32 32" xml:space="preserve">
+                  <path ng-attr-d="{{heart}}"></path>
+                </svg>
+              </div>
+              <div ng-if="displayMessageInput" class="cancelInput">
+                <button ng-click="handleCancelInput()">CANCEL</button>
+              </div>
+            </div>
+            <div class="handleFlashMessage">
+              <div ng-show="_success" class="success">{{_success}}</div>
+              <div class="error">{{_error}}</div>
+            </div>
+          </div>
+          <div class="desc">
+            <p>{{userProfile[0].Description}}</p>
+          </div>
+          <div class="tableWrapper">
+            <div class="tableRow">
+              <span id="tbHeader" class="tableColOne">Likes</span>
+              <span id="tbHeader" class="tableColTwo">Dislikes</span>
+            </div>
+            <div ng-repeat="item in likesAndDislikes" class="tableRow">
+              <span class="tableColOne">{{item.likes}}</span>
+              <span class="tableColTwo">{{item.dislikes}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
